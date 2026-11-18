@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand colors sampled from public/logo.svg. */
+  --color-primary: #1f6fb1;
+  --color-primary-hover: #195b92;
+  --color-primary-subtle: #edf5fc;
+  --color-primary-content: #ffffff;
+
+  --color-secondary: #6c4be8;
+  --color-secondary-hover: #5735ce;
+  --color-secondary-subtle: #f2effd;
+  --color-secondary-content: #ffffff;
+
+  /* Shared surfaces, borders, and text. */
+  --color-background: #f8f9fc;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f0f2f7;
+  --color-border: #e1e4ed;
+  --color-foreground: #202436;
+  --color-muted: #636779;
+
+  /* Incident status colors, paired with readable foregrounds. */
+  --color-success: #15803d;
+  --color-success-subtle: #f0fdf4;
+  --color-success-content: #ffffff;
+  --color-warning: #b45309;
+  --color-warning-subtle: #fffbeb;
+  --color-warning-content: #ffffff;
+  --color-danger: #b91c1c;
+  --color-danger-subtle: #fef2f2;
+  --color-danger-content: #ffffff;
+  --color-info: #1f6fb1;
+  --color-info-subtle: #edf5fc;
+  --color-info-content: #ffffff;
+}
+
+@layer base {
+  body {
+    @apply m-0 min-w-80 bg-background font-sans text-foreground antialiased;
+  }
+
+  #root {
+    min-height: 100dvh;
+  }
+}
