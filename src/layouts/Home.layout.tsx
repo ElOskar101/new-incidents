@@ -1,12 +1,12 @@
-import {Outlet} from "react-router-dom";
-import {Container} from "../components/container.tsx";
-import {Header} from "../components/header.tsx";
+import { Outlet } from 'react-router'
+import { Header } from '@/layouts/header'
+import { Container } from '@/layouts/container'
 
-export const HomeLayout = () => {
-    return (
-        <Container>
-            <Header/>
-            <Outlet/>
-        </Container>
-    )
+export function HomeLayout() {
+  return (
+    <Container>
+      <Header />
+      <Outlet />
+    </Container>
+  )
 }

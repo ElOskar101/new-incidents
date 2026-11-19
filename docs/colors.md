@@ -1,67 +1,58 @@
 # Color palette
 
-The palette is defined in [`src/index.css`](../src/index.css) using Tailwind's `@theme`. Primary blue and secondary violet come from [`public/logo.svg`](../public/logo.svg). The remaining colors support application surfaces, text, and incident statuses.
+The palette lives in [`src/index.css`](../src/index.css) and matches the Orioris
+shadcn theme: warm bone neutrals, violet primary, and soft shadows in `oklch`.
 
-## Brand colors
+Incident status tokens (`success`, `warning`, `danger`, `info`) and a few brand
+aliases (`primary-hover`, `surface`, …) are mapped onto that same system so badges
+and legacy utilities stay available.
 
-| Token | Hex | Purpose |
-| --- | --- | --- |
-| `primary` | `#1F6FB1` | Main actions, links, active navigation, and focus indicators |
-| `primary-hover` | `#195B92` | Hover background for primary actions |
-| `primary-subtle` | `#EDF5FC` | Light primary backgrounds |
-| `primary-content` | `#FFFFFF` | Text and icons on primary backgrounds |
-| `secondary` | `#6C4BE8` | Supporting actions and brand accents |
-| `secondary-hover` | `#5735CE` | Hover background for secondary actions |
-| `secondary-subtle` | `#F2EFFD` | Light secondary backgrounds |
-| `secondary-content` | `#FFFFFF` | Text and icons on secondary backgrounds |
+## Core (light)
 
-## Neutral colors
+| Token                                    | Value                           | Purpose                |
+| ---------------------------------------- | ------------------------------- | ---------------------- |
+| `background`                             | `oklch(0.965 0.006 85)`         | Page bone / off-white  |
+| `foreground`                             | `oklch(0.24 0.012 60)`          | Main text              |
+| `card` / `surface`                       | `oklch(0.985 0.003 85)`         | Cards, nav, inputs     |
+| `primary`                                | `oklch(0.5393 0.2713 286.7462)` | Actions, links, focus  |
+| `primary-foreground` / `primary-content` | `oklch(0.99 0.002 85)`          | Text on primary        |
+| `primary-hover`                          | `oklch(0.48 0.26 286.7462)`     | Primary hover          |
+| `primary-subtle` / `accent`              | `oklch(0.94 0.03 286.7462)`     | Light violet washes    |
+| `secondary`                              | `oklch(0.94 0.008 90)`          | Soft neutral secondary |
+| `secondary-foreground`                   | `oklch(0.28 0.012 60)`          | Text on secondary      |
+| `muted`                                  | `oklch(0.945 0.007 85)`         | Muted surfaces         |
+| `muted-foreground`                       | `oklch(0.48 0.012 60)`          | Supporting text        |
+| `destructive` / `danger`                 | `oklch(0.629 0.1902 23.0704)`   | Errors / destructive   |
+| `border`                                 | `oklch(0.88 0.01 85)`           | Borders and dividers   |
+| `ring`                                   | `oklch(0.55 0.04 286)`          | Focus rings            |
 
-| Token | Hex | Purpose |
-| --- | --- | --- |
-| `background` | `#F8F9FC` | Application background |
-| `surface` | `#FFFFFF` | Cards, navigation, and inputs |
-| `surface-hover` | `#F0F2F7` | Hover background for neutral elements |
-| `border` | `#E1E4ED` | Decorative borders and dividers |
-| `foreground` | `#202436` | Main text |
-| `muted` | `#636779` | Supporting text and placeholders |
+Dark mode uses the same token names with the Orioris `.dark` values (cooler violet
+primary on deep blue-gray surfaces).
 
 ## Status colors
 
-| Status token | Hex | Subtle token | Hex | Content token | Hex |
-| --- | --- | --- | --- | --- | --- |
-| `success` | `#15803D` | `success-subtle` | `#F0FDF4` | `success-content` | `#FFFFFF` |
-| `warning` | `#B45309` | `warning-subtle` | `#FFFBEB` | `warning-content` | `#FFFFFF` |
-| `danger` | `#B91C1C` | `danger-subtle` | `#FEF2F2` | `danger-content` | `#FFFFFF` |
-| `info` | `#1F6FB1` | `info-subtle` | `#EDF5FC` | `info-content` | `#FFFFFF` |
+| Status  | Token                      | Subtle           | Content           |
+| ------- | -------------------------- | ---------------- | ----------------- |
+| Success | `success`                  | `success-subtle` | `success-content` |
+| Warning | `warning`                  | `warning-subtle` | `warning-content` |
+| Danger  | `danger` (= `destructive`) | `danger-subtle`  | `danger-content`  |
+| Info    | `info`                     | `info-subtle`    | `info-content`    |
 
-Use success for successful outcomes, warning for conditions needing attention, danger for errors or destructive actions, and info for informational messages. Include a text label or icon so color is not the only way to communicate status.
+Values are oklch siblings of the Orioris chart greens/oranges/blues so badges sit
+in the same family as charts and alerts. Prefer a label or icon with color.
 
-## Tailwind usage
+## shadcn usage
 
-Every token is available through Tailwind color utilities, such as `bg-primary`, `text-muted`, `border-border`, and `ring-primary`. State variants work normally, including `hover:bg-primary-hover` and `focus-visible:ring-primary`.
+Components use semantic utilities such as `bg-primary`, `text-muted-foreground`,
+`border-border`, and `ring-primary`. Incident aliases (`bg-surface`,
+`bg-success-subtle`, `hover:bg-primary-hover`) resolve to the same CSS variables.
 
 ### Primary action
 
 ```tsx
-<button
-  className="rounded-md bg-primary px-4 py-2 text-primary-content hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
->
+<button className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
   Create incident
 </button>
-```
-
-### Search input
-
-```tsx
-<label className="block text-sm text-foreground">
-  Search incidents
-  <input
-    type="search"
-    placeholder="Search by title…"
-    className="mt-1 w-full rounded-md border border-muted bg-surface px-3 py-2 text-foreground placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-  />
-</label>
 ```
 
 ### Status badge
@@ -72,8 +63,7 @@ Every token is available through Tailwind color utilities, such as `bg-primary`,
 </span>
 ```
 
-Pair a solid background with its matching `*-content` token. Pair a subtle background with the corresponding base color for text. Check contrast when using other combinations, opacity, or custom backgrounds; decorative border colors may need a stronger alternative for interactive controls.
-
 ## Maintaining the palette
 
-Update the theme in `src/index.css` and this reference together. Prefer semantic utilities over repeated hex values in components so changes apply consistently throughout the application. The current palette defines a light theme only.
+Keep [`src/index.css`](../src/index.css) and this doc in sync with Orioris when the
+shared company theme changes. Prefer semantic utilities over raw color literals.
