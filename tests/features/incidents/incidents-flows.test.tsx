@@ -414,7 +414,7 @@ describe('create and edit', () => {
     const dialog = await screen.findByRole('dialog', { name: /Edit incident/ })
     const title = within(dialog).getByLabelText<HTMLInputElement>(/^Title/)
     expect(title.value).toBe(UMR.title)
-    expect(document.activeElement).toBe(title)
+    await waitFor(() => expect(document.activeElement).toBe(title))
     expect(title.selectionStart).toBe(UMR.title.length)
     expect(title.selectionEnd).toBe(UMR.title.length)
     expect(within(dialog).queryByLabelText(/How was it resolved/)).toBeNull()

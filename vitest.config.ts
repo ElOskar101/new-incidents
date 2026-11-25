@@ -8,6 +8,8 @@ export default mergeConfig(
       environment: 'jsdom',
       setupFiles: ['tests/setup.ts'],
       include: ['tests/**/*.test.{ts,tsx}'],
+      // Coverage + lazy routes make some flow tests exceed the 5s default.
+      testTimeout: 15_000,
       // Node 25+ ships its own `localStorage` global, which shadows the jsdom one
       // and is undefined without `--localstorage-file`. Disable it in test workers.
       execArgv: ['--no-experimental-webstorage'],

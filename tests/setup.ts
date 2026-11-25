@@ -82,4 +82,4 @@ if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {
   }
 }
 
-configure({ asyncUtilTimeout: 3000 })
+configure({ asyncUtilTimeout: 5_000 })
