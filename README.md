@@ -53,22 +53,30 @@ file by file.
 
 ```text
 src/
-  App.tsx, main.tsx         app shell, theme, routes (the only place that composes features)
+  App.tsx, main.tsx         app shell, theme, routes
+  layouts/                  shell chrome; may compose feature roots (e.g. incidents store)
   features/
     auth/                   session capture, login redirect, account header
-    home/                   home page placeholder
+    incidents/              board, detail, create/edit — services/ is the data API (local seed today)
   shared/
-    api/                    HTTP client, cancellable request hook
-    request-error/          request failure alert and messages
+    api/                    HTTP client and API errors
     error-boundary/         route error boundary
-    nav/, theme/
+    theme/                  light/dark/system theme
     ui/, lib/               generic shadcn components and utilities (no domain code)
   layouts/                  shell layout, header, page chrome
 ```
 
 - `shared` never imports `features`. Features never import each other.
 - Network functions are called only from `hooks/use-*-workflow.ts` or `services/`.
-- Requests use `useCancellableRequest` when a feature needs cancellable mutations.
 - Tests live in `tests/` and mirror `src/`.
+
+### Incidents data
+
+The UI never talks to HTTP directly. `useIncidentsWorkflow` / `useIncidents` use an
+`IncidentsApi` from `features/incidents/services/`. **Today that API is local**
+(`createLocalIncidentsApi` + `createSeedIncidents`) — that is how the product runs,
+not a temporary stub behind a fake layer. When the backend ships, replace the body of
+`createIncidentsApi` with `requestJson` against `config.ENDPOINTS.incidents` and keep
+the same `IncidentsApi` methods so pages stay unchanged.
 
 Theme colors (Orioris oklch palette + incident status aliases) are documented in [`docs/colors.md`](docs/colors.md).

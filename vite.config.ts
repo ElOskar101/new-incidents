@@ -14,6 +14,18 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Framework code changes rarely; its own chunks stay cached across app deploys.
+        manualChunks(id) {
+          if (/node_modules\/(react|react-dom|scheduler)\//.test(id)) return 'react'
+          if (id.includes('node_modules/react-router/')) return 'router'
+          return undefined
+        },
+      },
+    },
+  },
   // Development only: forwards API calls to the backend to avoid CORS.
   server: {
     proxy: {

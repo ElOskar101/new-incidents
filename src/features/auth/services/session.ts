@@ -1,9 +1,7 @@
-/** Only the access token is stored. */
 export const AUTH_STORAGE_KEY = 'incidents.auth:v1'
 
 const LOGIN_ORIGIN = 'https://auth.controlcentralcarrier.com/'
 
-/** Page to reopen after login. Drops `key` so the expired token is not sent back. */
 function resumeUrl(href: string): string {
   const url = new URL(href)
   url.searchParams.delete('key')
@@ -59,19 +57,16 @@ export function applySessionKey(search: string): string {
   return next ? `?${next}` : ''
 }
 
-/** Sends the user to login and asks to be returned to the current page, including its query. */
 export function redirectToLogin() {
   window.location.href = loginUrl(resumeUrl(window.location.href))
 }
 
-/** Leaves the page when there is no stored token. Returns whether the app can render. */
 export function requireSession(): boolean {
   if (readStoredToken()) return true
   redirectToLogin()
   return false
 }
 
-/** Captures `?key=` from the current URL and removes it so the token does not stay in the address bar. */
 export function captureAuthSession() {
   const nextSearch = applySessionKey(window.location.search)
   if (nextSearch === window.location.search) return

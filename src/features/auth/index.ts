@@ -1,4 +1,5 @@
-/** Session captured from the auth redirect (`?key=` is the access token) and the header account summary. */
 export { captureAuthSession, readStoredToken, requireSession } from './services/session'
+export type { AccountProfile } from './services/current-user'
 export { AccountSummary } from './components/account-summary'
 export { SessionGate } from './components/session-gate'
+export { useAccountProfile } from './hooks/use-account-profile'

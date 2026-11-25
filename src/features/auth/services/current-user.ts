@@ -1,19 +1,21 @@
-import { z } from 'zod'
+import { z } from 'zod/mini'
 import { ApiResponseError, requestJson } from '@/shared/api'
 
 /** Identity service. This host is not the PDF backend and is not proxied. */
 export const CURRENT_USER_URL = 'https://carriers.dentalautomation.ai/api/v2/users/me'
 export const ACCOUNT_PICTURES_URL = 'https://carriers.dentalautomation.ai/pictures'
 
+const optionalText = () => z.optional(z.string())
+
 const userSchema = z.looseObject({
-  email: z.string().optional(),
-  name: z.string().optional(),
-  fullName: z.string().optional(),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  first_name: z.string().optional(),
-  last_name: z.string().optional(),
-  urlImage: z.string().optional(),
+  email: optionalText(),
+  name: optionalText(),
+  fullName: optionalText(),
+  firstName: optionalText(),
+  lastName: optionalText(),
+  first_name: optionalText(),
+  last_name: optionalText(),
+  urlImage: optionalText(),
 })
 
 export interface AccountProfile {
@@ -44,7 +46,6 @@ function profileFrom(user: z.infer<typeof userSchema>): AccountProfile | null {
   }
 }
 
-/** Reads the user object, or the same object nested under `user`. */
 export function parseAccountProfile(payload: unknown): AccountProfile | null {
   const record = z.record(z.string(), z.unknown()).safeParse(payload)
   if (!record.success) return null
@@ -54,7 +55,6 @@ export function parseAccountProfile(payload: unknown): AccountProfile | null {
   return parsed.success ? profileFrom(parsed.data) : null
 }
 
-/** Loads the signed-in user. Sends the session token as `x-access-token`. */
 export async function getCurrentUser(token: string): Promise<AccountProfile> {
   const payload = await requestJson(CURRENT_USER_URL, z.unknown(), {
     headers: { 'x-access-token': token },

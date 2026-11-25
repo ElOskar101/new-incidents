@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import '@fontsource-variable/inter';
-@import '@fontsource-variable/inter/wght-italic.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -28,22 +27,11 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: IBM Plex Mono, monospace;
-  --font-serif: Lora, serif;
+  /* Dense metadata (card footers, keys, avatar initials). */
+  --text-2xs: 0.625rem; /* 10px */
+  --text-2xs--line-height: 1rem;
   --radius: 0.5rem;
   --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
   --tracking-tight: calc(var(--tracking-normal) - 0.025em);
@@ -90,6 +78,27 @@
   --color-info: var(--info);
   --color-info-subtle: var(--info-subtle);
   --color-info-content: var(--info-content);
+  /* Text on subtle tints and cards: AA (4.5:1) at the 11px metadata size */
+  --color-danger-strong: var(--danger-strong);
+  --color-warning-strong: var(--warning-strong);
+
+  /* Incident workflow statuses (icons and status dots) */
+  --color-status-pending: var(--status-pending);
+  --color-status-progress: var(--status-progress);
+  --color-status-done: var(--status-done);
+
+  /* People initials and board lanes */
+  --color-avatar: var(--avatar);
+  --color-avatar-foreground: var(--avatar-foreground);
+  --color-board-column: var(--board-column);
+
+  /* Kanban priority bands — muted, even lightness so the ladder reads as one family */
+  --color-priority-band-5: var(--priority-band-5);
+  --color-priority-band-4: var(--priority-band-4);
+  --color-priority-band-3: var(--priority-band-3);
+  --color-priority-band-2: var(--priority-band-2);
+  --color-priority-band-1: var(--priority-band-1);
+  --color-priority-band-foreground: var(--priority-band-foreground);
 }
 
 :root {
@@ -102,35 +111,23 @@
   --card-foreground: oklch(0.24 0.012 60);
   --popover: oklch(0.988 0.003 85);
   --popover-foreground: oklch(0.24 0.012 60);
-  --primary: oklch(0.5393 0.2713 286.7462);
+  /* Indigo bridge (#4560C8) — logo blue/violet midpoint, distinct from Orioris */
+  --primary: oklch(0.5256 0.1644 269.1155);
   --primary-foreground: oklch(0.99 0.002 85);
-  --primary-hover: oklch(0.48 0.26 286.7462);
-  --primary-subtle: oklch(0.94 0.03 286.7462);
+  --primary-hover: oklch(0.4567 0.1438 269.3927);
+  --primary-subtle: oklch(0.94 0.03 269.1155);
   --secondary: oklch(0.94 0.008 90);
   --secondary-foreground: oklch(0.28 0.012 60);
   --secondary-hover: oklch(0.9 0.01 90);
   --secondary-subtle: oklch(0.96 0.006 90);
   --muted: oklch(0.945 0.007 85);
   --muted-foreground: oklch(0.48 0.012 60);
-  --accent: oklch(0.94 0.03 286.7462);
-  --accent-foreground: oklch(0.32 0.12 286.7462);
+  --accent: oklch(0.94 0.03 269.1155);
+  --accent-foreground: oklch(0.35 0.1 269.1155);
   --destructive: oklch(0.629 0.1902 23.0704);
   --border: oklch(0.88 0.01 85);
   --input: oklch(0.91 0.008 85);
-  --ring: oklch(0.55 0.04 286);
-  --chart-1: oklch(0.7459 0.1483 156.4499);
-  --chart-2: oklch(0.5393 0.2713 286.7462);
-  --chart-3: oklch(0.7336 0.1758 50.5517);
-  --chart-4: oklch(0.5828 0.1809 259.7276);
-  --chart-5: oklch(0.559 0.01 60);
-  --sidebar: oklch(0.96 0.006 85);
-  --sidebar-foreground: oklch(0.24 0.012 60);
-  --sidebar-primary: oklch(0.32 0.02 60);
-  --sidebar-primary-foreground: oklch(0.99 0.002 85);
-  --sidebar-accent: oklch(0.935 0.008 85);
-  --sidebar-accent-foreground: oklch(0.24 0.012 60);
-  --sidebar-border: oklch(0.88 0.01 85);
-  --sidebar-ring: oklch(0.55 0.04 286);
+  --ring: oklch(0.55 0.04 269);
   --destructive-foreground: oklch(0.99 0.002 85);
   --success: oklch(0.52 0.14 156);
   --success-subtle: oklch(0.96 0.03 156);
@@ -142,8 +139,22 @@
   --info: oklch(0.5828 0.1809 259.7276);
   --info-subtle: oklch(0.95 0.03 260);
   --info-content: oklch(0.99 0.002 85);
+  --danger-strong: oklch(0.5 0.19 25);
+  --warning-strong: oklch(0.52 0.14 55);
+  --status-pending: oklch(0.55 0.01 60);
+  --status-progress: oklch(0.55 0.17 260);
+  --status-done: oklch(0.55 0.14 156);
+  --avatar: oklch(0.92 0.035 269);
+  --avatar-foreground: oklch(0.42 0.13 269);
+  --board-column: oklch(0.951 0.007 85);
+  /* Soft dust tones: rose → clay → indigo → stone → mist (same weight, low chroma) */
+  --priority-band-5: oklch(0.48 0.05 25);
+  --priority-band-4: oklch(0.5 0.045 50);
+  --priority-band-3: oklch(0.48 0.04 269);
+  --priority-band-2: oklch(0.52 0.018 60);
+  --priority-band-1: oklch(0.62 0.012 60);
+  --priority-band-foreground: oklch(0.97 0.005 85);
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: Lora, serif;
   --font-mono: IBM Plex Mono, monospace;
   --shadow-color: hsl(30 8% 20%);
   --shadow-opacity: 0.1;
@@ -172,35 +183,22 @@
   --card-foreground: oklch(0.9551 0 0);
   --popover: oklch(0.2568 0.0076 274.6528);
   --popover-foreground: oklch(0.9551 0 0);
-  --primary: oklch(0.6132 0.2294 291.7437);
+  --primary: oklch(0.632 0.1436 271.4146);
   --primary-foreground: oklch(1 0 0);
-  --primary-hover: oklch(0.68 0.2 291.7437);
-  --primary-subtle: oklch(0.32 0.05 291.7437);
+  --primary-hover: oklch(0.7 0.13 271.4146);
+  --primary-subtle: oklch(0.32 0.05 269.1155);
   --secondary: oklch(0.294 0.013 272.9312);
   --secondary-foreground: oklch(0.9551 0 0);
   --secondary-hover: oklch(0.34 0.015 272.9312);
   --secondary-subtle: oklch(0.28 0.012 272.9312);
   --muted: oklch(0.294 0.013 272.9312);
   --muted-foreground: oklch(0.7058 0 0);
-  --accent: oklch(0.32 0.05 291.7437);
-  --accent-foreground: oklch(0.88 0.06 291.7437);
+  --accent: oklch(0.32 0.05 269.1155);
+  --accent-foreground: oklch(0.88 0.06 269.1155);
   --destructive: oklch(0.7106 0.1661 22.2162);
   --border: oklch(0.3289 0.0092 268.3843);
   --input: oklch(0.3289 0.0092 268.3843);
-  --ring: oklch(0.6132 0.2294 291.7437);
-  --chart-1: oklch(0.8003 0.1821 151.711);
-  --chart-2: oklch(0.6132 0.2294 291.7437);
-  --chart-3: oklch(0.8077 0.1035 19.5706);
-  --chart-4: oklch(0.6691 0.1569 260.1063);
-  --chart-5: oklch(0.7058 0 0);
-  --sidebar: oklch(0.2011 0.0039 286.0396);
-  --sidebar-foreground: oklch(0.9551 0 0);
-  --sidebar-primary: oklch(0.6132 0.2294 291.7437);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.294 0.013 272.9312);
-  --sidebar-accent-foreground: oklch(0.6132 0.2294 291.7437);
-  --sidebar-border: oklch(0.3289 0.0092 268.3843);
-  --sidebar-ring: oklch(0.6132 0.2294 291.7437);
+  --ring: oklch(0.632 0.1436 271.4146);
   --destructive-foreground: oklch(1 0 0);
   --success: oklch(0.72 0.16 156);
   --success-subtle: oklch(0.3 0.04 156);
@@ -212,9 +210,23 @@
   --info: oklch(0.6691 0.1569 260.1063);
   --info-subtle: oklch(0.3 0.05 260);
   --info-content: oklch(1 0 0);
+  --danger-strong: oklch(0.8 0.12 22);
+  --warning-strong: oklch(0.8 0.12 70);
+  --status-pending: oklch(0.68 0.01 270);
+  --status-progress: oklch(0.7 0.14 260);
+  --status-done: oklch(0.74 0.15 156);
+  --avatar: oklch(0.36 0.06 269);
+  --avatar-foreground: oklch(0.9 0.05 269);
+  /* Lanes sit below the page so cards (card = 0.257) read as raised */
+  --board-column: oklch(0.2 0.005 271);
+  --priority-band-5: oklch(0.44 0.045 25);
+  --priority-band-4: oklch(0.46 0.04 50);
+  --priority-band-3: oklch(0.44 0.04 269);
+  --priority-band-2: oklch(0.46 0.015 270);
+  --priority-band-1: oklch(0.5 0.01 270);
+  --priority-band-foreground: oklch(0.92 0.008 85);
   --radius: 0.5rem;
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: Lora, serif;
   --font-mono: IBM Plex Mono, monospace;
   --shadow-color: hsl(0 0% 0%);
   --shadow-opacity: 0.16;
@@ -245,6 +257,100 @@
   }
 
   #root {
-    min-height: 100dvh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+}
+
+/*
+ * App scrollbars: thin, rounded, muted. Thumb stays quiet until the panel is hovered
+ * so columns don't look busy; Firefox uses scrollbar-color.
+ */
+@utility scrollbar-app {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--muted-foreground) 28%, transparent) transparent;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: color-mix(in oklch, var(--muted-foreground) 22%, transparent);
+    border-radius: 999px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklch, var(--muted-foreground) 42%, transparent);
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+@utility scrollbar-app-hover {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  &:hover,
+  &:focus-within {
+    scrollbar-color: color-mix(in oklch, var(--muted-foreground) 28%, transparent) transparent;
+  }
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 999px;
+  }
+
+  &:hover::-webkit-scrollbar-thumb,
+  &:focus-within::-webkit-scrollbar-thumb {
+    background: color-mix(in oklch, var(--muted-foreground) 22%, transparent);
+  }
+
+  &:hover::-webkit-scrollbar-thumb:hover,
+  &:focus-within::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklch, var(--muted-foreground) 42%, transparent);
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+/* "Print or save as PDF" from the incident detail prints only the open sheet. */
+@media print {
+  #root,
+  [data-sonner-toaster],
+  [data-slot='sheet-overlay'],
+  [data-print-hidden] {
+    display: none !important;
+  }
+
+  [data-slot='sheet-content'] {
+    position: static !important;
+    max-width: none !important;
+    height: auto !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  [data-print-expand] {
+    overflow: visible !important;
   }
 }

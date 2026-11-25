@@ -39,11 +39,11 @@ it('tracks system preference changes and removes its listener when the theme cha
   })
   expect(document.documentElement.classList.contains('dark')).toBe(true)
   fireEvent.click(screen.getByRole('button', { name: 'Dark' }))
-  expect(localStorage.getItem('vite-ui-theme')).toBe('dark')
+  expect(localStorage.getItem('incidents.theme:v1')).toBe('dark')
   expect(query.removeEventListener).toHaveBeenCalledWith('change', listener)
 })
 it('uses the default for an invalid stored theme and keeps switching usable without storage', () => {
-  localStorage.setItem('vite-ui-theme', 'unknown')
+  localStorage.setItem('incidents.theme:v1', 'unknown')
   vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
     throw new Error('Unavailable')
   })
@@ -55,4 +55,23 @@ it('uses the default for an invalid stored theme and keeps switching usable with
   expect(document.documentElement.classList.contains('light')).toBe(true)
   fireEvent.click(screen.getByRole('button', { name: 'Dark' }))
   expect(document.documentElement.classList.contains('dark')).toBe(true)
+})
+
+it('prints with the light palette and restores dark afterwards', () => {
+  localStorage.setItem('incidents.theme:v1', 'dark')
+  render(
+    <ThemeProvider>
+      <p>Content</p>
+    </ThemeProvider>,
+  )
+  const root = document.documentElement
+  expect(root.classList.contains('dark')).toBe(true)
+  act(() => {
+    window.dispatchEvent(new Event('beforeprint'))
+  })
+  expect(root.classList.contains('light')).toBe(true)
+  act(() => {
+    window.dispatchEvent(new Event('afterprint'))
+  })
+  expect(root.classList.contains('dark')).toBe(true)
 })

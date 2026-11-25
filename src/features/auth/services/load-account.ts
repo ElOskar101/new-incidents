@@ -26,6 +26,10 @@ export function getAccountSnapshot(): AccountSnapshot {
   return snapshot
 }
 
+export function getAccountProfile(): AccountProfile | null {
+  return snapshot.status === 'ready' ? snapshot.profile : null
+}
+
 export function subscribeAccount(token: string, listener: () => void) {
   listeners.add(listener)
   if (activeToken !== token) {
@@ -34,12 +38,6 @@ export function subscribeAccount(token: string, listener: () => void) {
     void loadAccount(token)
   }
   return () => listeners.delete(listener)
-}
-
-export function retryAccount(token: string) {
-  activeToken = token
-  publish({ status: 'loading' })
-  void loadAccount(token)
 }
 
 function loadAccount(token: string) {

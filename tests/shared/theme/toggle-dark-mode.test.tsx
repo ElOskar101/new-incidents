@@ -41,7 +41,7 @@ it('switches and remembers the theme from the menu', () => {
   )
   choose('Dark')
   expect(document.documentElement.classList.contains('dark')).toBe(true)
-  expect(localStorage.getItem('vite-ui-theme')).toBe('dark')
+  expect(localStorage.getItem('incidents.theme:v1')).toBe('dark')
   choose('Light')
   expect(document.documentElement.classList.contains('light')).toBe(true)
   expect(document.documentElement.classList.contains('dark')).toBe(false)

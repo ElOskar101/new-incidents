@@ -4,7 +4,7 @@ import { ThemeContext, type Theme } from './theme-context'
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
-  storageKey = 'vite-ui-theme',
+  storageKey = 'incidents.theme:v1',
 }: {
   children: React.ReactNode
   defaultTheme?: Theme
@@ -35,6 +35,24 @@ export function ThemeProvider({
     query.addEventListener('change', update)
     return () => query.removeEventListener('change', update)
   }, [theme])
+  // Printouts (incident "Save as PDF") always use the light palette.
+  useEffect(() => {
+    const root = document.documentElement
+    let wasDark = false
+    const toLight = () => {
+      wasDark = root.classList.contains('dark')
+      if (wasDark) root.classList.replace('dark', 'light')
+    }
+    const restore = () => {
+      if (wasDark) root.classList.replace('light', 'dark')
+    }
+    window.addEventListener('beforeprint', toLight)
+    window.addEventListener('afterprint', restore)
+    return () => {
+      window.removeEventListener('beforeprint', toLight)
+      window.removeEventListener('afterprint', restore)
+    }
+  }, [])
   return (
     <ThemeContext.Provider
       value={{

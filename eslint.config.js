@@ -93,6 +93,7 @@ export default defineConfig([
     files: ['src/features/**/*.{ts,tsx}'],
     rules: { 'no-restricted-imports': restrict({ patterns: FEATURE_PATTERNS }) },
   },
+
   {
     files: ['src/features/*/hooks/use-*-workflow.ts', 'src/features/*/services/**/*.ts'],
     rules: {

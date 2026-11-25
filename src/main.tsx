@@ -1,6 +1,5 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router'
 import './index.css'
 import App from './App'
 import { captureAuthSession, readStoredToken, requireSession, SessionGate } from '@/features/auth'
@@ -16,9 +15,7 @@ if (requireSession()) {
   createRoot(rootElement).render(
     <StrictMode>
       <SessionGate token={token}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <App />
       </SessionGate>
     </StrictMode>,
   )

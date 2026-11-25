@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/mini'
 
 const codeMessages: Record<string, string> = {}
 
@@ -10,18 +10,17 @@ const validationIssueSchema = z.object({
 
 // Not documented in the OpenAPI spec: shape observed in backend responses.
 const errorObjectSchema = z.object({
-  code: z.string().optional(),
-  message: z.string().optional(),
-  document_id: z.string().optional(),
+  code: z.optional(z.string()),
+  message: z.optional(z.string()),
+  document_id: z.optional(z.string()),
 })
 
 const errorPayloadSchema = z.object({
-  detail: z.union([z.string(), z.array(validationIssueSchema), errorObjectSchema]).optional(),
+  detail: z.optional(z.union([z.string(), z.array(validationIssueSchema), errorObjectSchema])),
   // Set by the client when the body is not JSON (for example, a proxy HTML page).
-  message: z.string().optional(),
+  message: z.optional(z.string()),
 })
 
-/** FastAPI `detail`: a message or code, field validation issues, or an error object. */
 export type ApiErrorDetail = NonNullable<z.infer<typeof errorPayloadSchema>['detail']>
 
 function detailMessages(detail: ApiErrorDetail): string[] {
@@ -37,9 +36,7 @@ function detailMessages(detail: ApiErrorDetail): string[] {
 
 export class ApiError extends Error {
   readonly status: number
-  /** Raw response body, kept for diagnostics. */
   readonly payload: unknown
-  /** Typed `detail`, or `undefined` when the body has an unknown shape. */
   readonly detail: ApiErrorDetail | undefined
   readonly messages: string[]
 

@@ -15,6 +15,10 @@ dist-ssr
 !.env.example
 
 
+# Never commit real patient/eligibility fixtures
+public/mock-bucket/
+public/attachments/
+
 # Coverage / test output
 coverage
 

@@ -11,6 +11,7 @@ import {
 import { Skeleton } from '@/shared/ui/skeleton'
 import type { AccountProfile } from '../services/current-user'
 import { getAccountSnapshot, subscribeAccount } from '../services/load-account'
+import { clearAccountCache } from '../services/load-account'
 import { clearAuthSession, readStoredToken, redirectToLogin } from '../services/session'
 
 export function AccountSummary() {
@@ -78,6 +79,7 @@ function AccountAvatar({ imageUrl }: { imageUrl: string | null }) {
 
 function logOut() {
   clearAuthSession()
+  clearAccountCache()
   redirectToLogin()
 }
 

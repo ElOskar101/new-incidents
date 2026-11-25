@@ -1,4 +1,4 @@
-import type { z } from 'zod'
+import { safeParse, type core } from 'zod/mini'
 import { config } from './config'
 import {
   ApiError,
@@ -9,27 +9,16 @@ import {
 } from './api-errors'
 
 export interface RequestOptions {
-  /** Request body. FormData for multipart uploads; string for JSON (`JSON.stringify`). */
   body?: FormData | string
-  /** Defaults to POST when `body` is set, otherwise GET. */
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
-  /** Cancels the request. The abort error is rethrown as is. */
   signal?: AbortSignal
-  /** Total time for the request, including reading the body. Throws `ApiTimeoutError`. */
   timeoutMs?: number
-  /** Extra request headers. `Accept: application/json` is always set. */
   headers?: Record<string, string>
 }
 
-/**
- * Sends one request (no retries) and validates the JSON response with `schema`.
- *
- * Throws `ApiNetworkError`, `ApiTimeoutError`, `ApiError` (non-2xx), or
- * `ApiResponseError` (invalid payload). Abort errors from `options.signal` pass through.
- */
 export async function requestJson<T>(
   url: string,
-  schema: z.ZodType<T>,
+  schema: core.$ZodType<T>,
   options: RequestOptions = {},
 ): Promise<T> {
   const timeoutMs = options.timeoutMs ?? config.REQUEST_TIMEOUT_MS.default
@@ -62,7 +51,7 @@ export async function requestJson<T>(
   }
   if (!response.ok) throw new ApiError(response.status, payload)
 
-  const result = schema.safeParse(payload)
+  const result = safeParse(schema, payload)
   if (!result.success) throw new ApiResponseError(payload, result.error.issues)
   return result.data
 }

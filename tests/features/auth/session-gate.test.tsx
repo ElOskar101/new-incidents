@@ -1,18 +1,20 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, render, screen } from '@testing-library/react'
 import { afterEach, expect, it, vi } from 'vitest'
 import { SessionGate } from '../../../src/features/auth/components/session-gate'
 import { clearAccountCache } from '../../../src/features/auth/services/load-account'
+import { AUTH_STORAGE_KEY } from '../../../src/features/auth/services/session'
 
 afterEach(() => {
   cleanup()
   clearAccountCache()
-  localStorage.removeItem('vite-ui-theme')
+  localStorage.clear()
   document.documentElement.classList.remove('dark', 'light')
   vi.unstubAllGlobals()
+  vi.useRealTimers()
 })
 
 it('blocks the app until the identity service validates the token', async () => {
-  localStorage.setItem('vite-ui-theme', 'dark')
+  localStorage.setItem('incidents.theme:v1', 'dark')
   let resolve!: (response: Response) => void
   vi.stubGlobal(
     'fetch',
@@ -34,21 +36,32 @@ it('blocks the app until the identity service validates the token', async () => 
   expect(await screen.findByText('Protected content')).toBeTruthy()
 })
 
-it('blocks the app on a network failure and allows retry', async () => {
-  vi.stubGlobal(
-    'fetch',
-    vi
-      .fn()
-      .mockRejectedValueOnce(new Error('offline'))
-      .mockResolvedValueOnce(new Response(JSON.stringify({ name: 'Ada' }), { status: 200 })),
-  )
+it('shows a brief unavailable message then clears the session and redirects to login', async () => {
+  vi.useFakeTimers()
+  localStorage.setItem(AUTH_STORAGE_KEY, 'stale-token')
+  const location = { href: 'http://localhost/incidents' }
+  vi.stubGlobal('location', location)
+  vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')))
+
   render(
-    <SessionGate token="token">
+    <SessionGate token="stale-token">
       <div>Protected content</div>
     </SessionGate>,
   )
-  expect(await screen.findByText('Unable to verify your session.')).toBeTruthy()
+
+  await act(async () => {
+    await Promise.resolve()
+  })
+
+  expect(screen.getByRole('alert')).toBeTruthy()
+  expect(screen.getByText('Unable to verify your session.')).toBeTruthy()
+  expect(screen.queryByRole('button')).toBeNull()
   expect(screen.queryByText('Protected content')).toBeNull()
-  fireEvent.click(screen.getByRole('button', { name: 'Try again' }))
-  expect(await screen.findByText('Protected content')).toBeTruthy()
+
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(3_000)
+  })
+
+  expect(localStorage.getItem(AUTH_STORAGE_KEY)).toBeNull()
+  expect(location.href).toMatch(/^https:\/\/auth\.controlcentralcarrier\.com\/\?url=/)
 })

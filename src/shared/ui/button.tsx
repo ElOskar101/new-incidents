@@ -1,4 +1,4 @@
-import { Slot } from '@radix-ui/react-slot'
+import { Slot } from 'radix-ui'
 import { type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
 
@@ -11,7 +11,7 @@ export interface ButtonProps
 }
 
 function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
-  const Comp = asChild ? Slot : 'button'
+  const Comp = asChild ? Slot.Root : 'button'
 
   return (
     <Comp
