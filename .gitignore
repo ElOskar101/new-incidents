@@ -11,9 +11,21 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+!.env.example
+!.env.test
+
+
+# Never commit real patient/eligibility fixtures
+public/mock-bucket/
+public/attachments/
+
+# Coverage / test output
+coverage
 
 # Editor directories and files
 .vscode/*
+.cursor/
 !.vscode/extensions.json
 .idea
 .DS_Store

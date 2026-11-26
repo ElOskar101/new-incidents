@@ -1,21 +1,22 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import '@fontsource-variable/inter'
-import '@fontsource-variable/inter/wght-italic.css'
 import './index.css'
-import App from './App.tsx'
-import {BrowserRouter} from "react-router-dom";
+import App from './App'
+import { captureAuthSession, readStoredToken, requireSession, SessionGate } from '@/features/auth'
 
-const rootElement = document.getElementById('root')
+captureAuthSession()
 
-if (!rootElement) {
-  throw new Error('Unable to start the application: the root element is missing.')
+if (requireSession()) {
+  const rootElement = document.getElementById('root')
+  if (!rootElement) throw new Error('Root element #root not found.')
+  const token = readStoredToken()
+  if (!token) throw new Error('A session is required to load the app.')
+
+  createRoot(rootElement).render(
+    <StrictMode>
+      <SessionGate token={token}>
+        <App />
+      </SessionGate>
+    </StrictMode>,
+  )
 }
-
-createRoot(rootElement).render(
-  <StrictMode>
-      <BrowserRouter>
-          <App />
-      </BrowserRouter>
-  </StrictMode>,
-)
